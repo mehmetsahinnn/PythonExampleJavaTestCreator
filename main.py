@@ -6,48 +6,17 @@ openai.api_key = API_KEY.API_KEY
 
 def main():
     input_filename = 'example_code'
-    output_filename = 'Code.java'
+    output_filename = 'Calculator.java'
 
     unit_tests = read_from_file(input_filename)
     method_code = generate_method_from_tests(unit_tests, language="Java")
 
-    # Add necessary imports and mock definitions
-    class_code = f"""
-import org.springframework.http.HttpStatus;
+    class_code = f"""import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-class Customer {{
-    private String email;
-    private String password;
-
-    // Getters and Setters
-    public String getEmail() {{
-        return email;
-    }}
-
-    public void setEmail(String email) {{
-        this.email = email;
-    }}
-
-    public String getPassword() {{
-        return password;
-    }}
-
-    public void setPassword(String password) {{
-        this.password = password;
-    }}
-}}
-
-class CustomerService {{
-    public Customer findByEmail(String email) {{
-        // Mock implementation
-        return new Customer();
-    }}
-}}
 
 public class Calculator {{
     private CustomerService customerService = new CustomerService();
-
+    
     {method_code}
 }}
 """

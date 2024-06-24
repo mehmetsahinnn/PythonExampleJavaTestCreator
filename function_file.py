@@ -19,6 +19,12 @@ def generate_method_from_tests(unit_tests, language="Java"):
     method_code = response.choices[0].message['content'].strip()
     method_code = method_code.replace('```', '')
     method_code = method_code.replace('java', '')
+    method_code = method_code.replace('public class Calculator {', '')
+
+    method_code = method_code.rstrip()
+    if method_code.endswith('}'):
+        method_code = method_code[:-1].rstrip()
+
     return method_code
 
 
@@ -34,13 +40,15 @@ def write_to_file(filename, content):
 
 
 def compile_java_files():
-    process = subprocess.run(["javac", "*.java"], capture_output=True, text=True)
+    process = subprocess.run([
+        "javac", "-cp", ".:spring-web-6.1.10.jar:spring-core-5.3.9.jar", "*.java"
+    ], capture_output=True, text=True)
     return process.returncode, process.stdout, process.stderr
 
 
 def run_tests():
     process = subprocess.run([
-        "java", "-cp", ".:junit-4.13.2.jar:hamcrest-core-1.3.jar:spring-web-5.3.9.jar:spring-core-5.3.9.jar",
+        "java", "-cp", ".:junit-4.13.2.jar:hamcrest-core-1.3.jar:spring-web-6.1.10.jar:spring-core-5.3.9.jar",
         "org.junit.runner.JUnitCore", "CalculatorTest"
     ], capture_output=True, text=True)
     return process.returncode, process.stdout, process.stderr
