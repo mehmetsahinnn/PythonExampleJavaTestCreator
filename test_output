@@ -1,46 +1,33 @@
 
-        To satisfy the given unit test, you need to implement a method in a controller class that retrieves the estimated delivery date of an order. Here is a possible implementation:
-
-1. **OrderController.**: The controller class that handles the HTTP request.
-2. **OrderService.**: A service class that provides the business logic to fetch the order details.
-3. **Order.**: A simple POJO representing the order.
-
-### 1. OrderController.
+        Based on the provided unit tests, it appears that you need to implement methods in the `ElasticOrderService` class that filter orders based on date ranges and usernames. Below are the implementations for the methods `filterOrderByDate` and `filterOrderByUser`:
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import .time.LocalDateTime;
+import .util.*;
+import .util.stream.Collectors;
 
-@RestController
-public class OrderController {
+public class ElasticOrderService {
 
-    @Autowired
-    private OrderService orderService;
+    private final OrderDocumentRepository orderDocumentRepository;
 
-    @GetMapping("/orders/{id}/estimatedDeliveryDate")
-    public ResponseEntity<?> getEstimatedDeliveryDate(@PathVariable Long id) {
-        Order order = orderService.getOrderById(id);
-        if (order != null) {
-            return ResponseEntity.ok(order.getEstimatedDeliveryDate());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
-        }
+    public ElasticOrderService(OrderDocumentRepository orderDocumentRepository) {
+        this.orderDocumentRepository = orderDocumentRepository;
     }
-}
 
+    public Map<Long, List<OrderDocument>> filterOrderByDate(LocalDateTime startDate, LocalDateTime endDate) {
+        List<OrderDocument> orders = orderDocumentRepository.findOrdersByDateBetween(startDate, endDate);
+        return groupOrdersByUserId(orders);
+    }
 
-### 2. OrderService.
+    public Map<Long, List<OrderDocument>> filterOrderByUser(String username, LocalDateTime startDate, LocalDateTime endDate) {
+        List<OrderDocument> orders = orderDocumentRepository.findUserByUsername(username);
+        List<OrderDocument> filteredOrders = orders.stream()
+                .filter(order -> !order.getOrderDate().isBefore(startDate) && !order.getOrderDate().isAfter(endDate))
+                .collect(Collectors.toList());
+        return groupOrdersByUserId(filteredOrders);
+    }
 
-
-import org.springframework.stereotype.Service;
-
-@Service
-public class OrderService {
-
-    public Order getOrderById(Long id) {
-        // Mock implementation. In a real application, this would fetch the order from a database.
+    private Map<Long, List<OrderDocument>> groupOrdersByUserId(List<OrderDocument> orders) {
+        return
     }
     
