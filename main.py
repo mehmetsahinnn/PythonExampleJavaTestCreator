@@ -6,7 +6,7 @@ openai.api_key = API_KEY.API_KEY
 
 def main():
     input_filename = 'example_code'
-    output_filename = 'Test.java'
+    output_filename = 'Code.java'
 
     unit_tests = read_from_file(input_filename)
     method_code = generate_method_from_tests(unit_tests, language="Java")
