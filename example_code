@@ -1,3 +1,18 @@
-public int add(int a, int b) {
-    return a + b;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
+public class CalculatorTest {
+    @Test
+    public void testLogin() {
+        Calculator calculator = new Calculator();
+        Customer customer = new Customer();
+        customer.setEmail("test@example.com");
+        customer.setPassword("password");
+
+        ResponseEntity<?> response = calculator.login(customer);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Login successful", response.getBody());
+    }
 }

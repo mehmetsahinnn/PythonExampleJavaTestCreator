@@ -1,37 +1,11 @@
-Certainly! To write a unit test for the `add` method, you can use a testing framework like JUnit. Below is an example of how you can write unit tests for the `add` method using JUnit 5.
-
-First, ensure you have JUnit 5 added to your project dependencies. If you are using Maven, your `pom.xml` should include:
-
-```xml
-<dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter-engine</artifactId>
-    <version>5.8.1</version>
-    <scope>test</scope>
-</dependency>
-```
-
-Here's the unit test code:
-
-```java
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
-
-public class CalculatorTest {
-
-    // Assuming the add method is in a class named Calculator
-    private final Calculator calculator = new Calculator();
-
-    @Test
-    public void testAddPositiveNumbers() {
-        assertEquals(5, calculator.add(2, 3), "2 + 3 should equal 5");
+public ResponseEntity<?> login(Customer customer) {
+    Customer existingCustomer = customerService.findByEmail(customer.getEmail());
+    
+    if (existingCustomer == null || !existingCustomer.getPassword().equals(customer.getPassword())) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
     }
-
-    @Test
-    public void testAddNegativeNumbers() {
-        assertEquals(-5, calculator.add(-2, -3), "-2 + -3 should equal -5");
-    }
-
-    @Test
-    public void testAddPositiveAndNegativeNumbers() {
-        assertEquals(1, calculator.add(3, -2), "3 + -2 should equal
+    
+    // Logic for successful login
+    
+    return ResponseEntity.ok().build();
+}
