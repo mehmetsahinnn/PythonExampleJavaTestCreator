@@ -1,11 +1,46 @@
-public ResponseEntity<?> login(Customer customer) {
-    Customer existingCustomer = customerService.findByEmail(customer.getEmail());
-    
-    if (existingCustomer == null || !existingCustomer.getPassword().equals(customer.getPassword())) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+
+        To satisfy the given unit test, you need to implement a method in a controller class that retrieves the estimated delivery date of an order. Here is a possible implementation:
+
+1. **OrderController.**: The controller class that handles the HTTP request.
+2. **OrderService.**: A service class that provides the business logic to fetch the order details.
+3. **Order.**: A simple POJO representing the order.
+
+### 1. OrderController.
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class OrderController {
+
+    @Autowired
+    private OrderService orderService;
+
+    @GetMapping("/orders/{id}/estimatedDeliveryDate")
+    public ResponseEntity<?> getEstimatedDeliveryDate(@PathVariable Long id) {
+        Order order = orderService.getOrderById(id);
+        if (order != null) {
+            return ResponseEntity.ok(order.getEstimatedDeliveryDate());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
+        }
+    }
+}
+
+
+### 2. OrderService.
+
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class OrderService {
+
+    public Order getOrderById(Long id) {
+        // Mock implementation. In a real application, this would fetch the order from a database.
     }
     
-    // Logic for successful login
-    
-    return ResponseEntity.ok().build();
-}

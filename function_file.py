@@ -1,5 +1,3 @@
-import subprocess
-
 import openai
 
 
@@ -7,9 +5,9 @@ def generate_method_from_tests(unit_tests, language="Java"):
     prompt = f"Write the corresponding {language} method that satisfies the following unit tests:\n\n{unit_tests}\n\nMethod:"
 
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # gpt-4o
+        model="gpt-4o",  # gpt-4o
         messages=[
-            {"role": "system", "content": "You are a helpful assistant that writes methods to satisfy unit tests."},
+            {"role": "system", "content": "You are a helpful assistant that writes up to multiple methods to satisfy unit tests."},
             {"role": "user", "content": prompt}
         ],
         max_tokens=300,  # Adjust the length based on your need
@@ -37,19 +35,4 @@ def read_from_file(filename):
 def write_to_file(filename, content):
     with open(filename, 'w') as file:
         file.write(content)
-
-
-def compile_java_files():
-    process = subprocess.run([
-        "javac", "-cp", ".:spring-web-6.1.10.jar:spring-core-5.3.9.jar", "*.java"
-    ], capture_output=True, text=True)
-    return process.returncode, process.stdout, process.stderr
-
-
-def run_tests():
-    process = subprocess.run([
-        "java", "-cp", ".:junit-4.13.2.jar:hamcrest-core-1.3.jar:spring-web-6.1.10.jar:spring-core-5.3.9.jar",
-        "org.junit.runner.JUnitCore", "CalculatorTest"
-    ], capture_output=True, text=True)
-    return process.returncode, process.stdout, process.stderr
 

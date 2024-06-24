@@ -5,14 +5,15 @@ import org.springframework.http.HttpStatus;
 
 public class CalculatorTest {
     @Test
-    public void testLogin() {
-        Calculator calculator = new Calculator();
-        Customer customer = new Customer();
-        customer.setEmail("test@example.com");
-        customer.setPassword("password");
+    void testGetEstimatedDeliveryDate() {
+        Order order = new Order();
+        order.setId(1L);
+        order.setEstimatedDeliveryDate(LocalDate.now());
+        when(orderService.getOrderById(1L)).thenReturn(order);
 
-        ResponseEntity<?> response = calculator.login(customer);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Login successful", response.getBody());
+        ResponseEntity<?> responseEntity = orderController.getEstimatedDeliveryDate(1L);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(order.getEstimatedDeliveryDate(), responseEntity.getBody());
     }
 }
