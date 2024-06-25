@@ -7,10 +7,10 @@ def generate_method_from_tests(unit_tests, language="Java"):
     response = openai.ChatCompletion.create(
         model="gpt-4o",  # gpt-4o
         messages=[
-            {"role": "system", "content": "You are a helpful assistant that writes up to multiple methods to satisfy unit tests."},
+            {"role": "system", "content": "You are a helpful assistant that writes up to multiple methods to satisfy unit tests. But, please complete all methods write the possible greatest code"},
             {"role": "user", "content": prompt}
         ],
-        max_tokens=300,  # Adjust the length based on your need
+        max_tokens=1000,  # Adjust the length based on your need
         temperature=0.5
     )
 
